@@ -1,5 +1,7 @@
 <?php 
+session_start();
 require '../model/Model.php';
+
 class Authentication {
 
     public function login(){
@@ -14,19 +16,27 @@ class Authentication {
 
             $res = $stmt->get_result();
 
-            if($res->num_rows == 1){
+            if($res->num_rows == 1):
     
                 $user = $res->fetch_object();
 
                 $_SESSION['data'] = array(
                     "id" => $user->id,
-                    "email" =>$user->email,
+                    "email" => $user->email,
+                    "firstname" => $user->firstname
                 );
-            }
-            else
-            {
+
+                if($user->user_type === 'user')
+                {
+                    header("location: home.php");   
+                }
+                else
+                {
+                    header("location: admin.rooms.php");
+                }
+            else:
                 echo 'Wrong Email or Password';
-            }
+            endif;
         }
     }
 }
