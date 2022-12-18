@@ -12,7 +12,7 @@
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="admin.customer.php">Customer</a>
+          <a class="nav-link" href="admin.customers.php">Customer</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="admin.rooms.php">Rooms</a>

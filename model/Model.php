@@ -11,8 +11,6 @@ class Singleton{
     {
         if(self::$connection == NULL):
             self::$connection = new mysqli('localhost', 'root', '', 'resort');
-        else:
-            echo 'Database Class is Already Instantiated';
         endif;
 
         return self::$connection;

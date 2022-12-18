@@ -1,12 +1,13 @@
 <?php require_once '../includes/header.inc.php' ?>
-<?php require_once '../controller/Session.php'?>
+<?php require_once '../controller/Session.php' ?>
+<?php require_once '../controller/Room.php' ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="../index.php">
-                        <img src="../public/image/cover_photo_1.png" alt="logo" style="height: 50px; width:50px"><span class="px-3 fw-bold" style="color: rgb(109, 140, 98)">Saluysoy Resort</span> 
+                        <img src="../public/image/cover_photo_1.png" alt="logo" style="height: 50px; width:50px"><span class="px-3 fw-bold" style="color: rgb(109, 140, 98)">Saluysoy Resort</span>
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -31,18 +32,15 @@
                             <li class="nav-item">
                                 <?php
 
-                                    if(!isset($_SESSION['data']))
-                                    {
-                                        ?>
-                                            <a class="nav-link" href="auth.php">Account</a>
-                                        <?php
-                                    }
-                                    else
-                                    {
-                                        ?>
-                                            <a class="nav-link" href="../controller/Logout.php">Logout <?php echo "<b>".strtoupper($session::showSession('data')['firstname'])."</b>"?></a>
-                                        <?php
-                                    }
+                                if (!isset($_SESSION['data'])) {
+                                ?>
+                                    <a class="nav-link" href="auth.php">Account</a>
+                                <?php
+                                } else {
+                                ?>
+                                    <a class="nav-link" href="../controller/Logout.php">Logout <?php echo "<b>" . strtoupper($session::showSession('data')['firstname']) . "</b>" ?></a>
+                                <?php
+                                }
                                 ?>
                             </li>
                         </ul>
@@ -91,39 +89,41 @@
 
             <p class="text-center" style="text-align: justify;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi veniam officiis vel omnis dolore id sit, ab error ratione cum.</p>
 
-            
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
+
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <?php
+                    foreach ($room->showRoom() as $room) :
+                    ?>
                         <div class="col-12 col-md-12 col-lg-2 my-2 my-lg-0 card swiper-slide" style="height: auto;">
-                            <img src="../public/image/resources7.jpg" class="img-fluid h-100" alt="...">
+                            <img src="../storage/<?php echo $room['picture'] ?>" class="img-fluid h-100" alt="...">
                             <div class="card-body d-flex justify-content-between">
-                                <button class="btn btn-sm btn-success">Book Now</button>
-                                <p class="text-secondary">₱100 per Night</p>
+                            <form action="booking.php" method="post">
+                                <input type="hidden" name="price" value="<?php echo $room['price']?>">
+                                <input type="hidden" name="user_id" value="<?php echo $session::showSession('data')['id']?>">
+                                <input type="hidden" name="room_id" value="<?php echo $room['id']?>">
+                                <?php 
+                                    $class = '';
+
+                                    $room['is_occupied'] ? $class = 'disabled': $class = '';
+                                ?>
+                                <button name="book_btn" class="btn btn-sm btn-success  <?php echo $class?>">Book Now</button>
+                            </form>
+                                <div class="d-flex flex-column">
+                                    <small class="text-secondary">₱<?php echo $room['price'] ?> per Night</small>
+                                    <small class="text-secondary"><?php echo $room['is_occupied'] ? "Occupied" : "Available" ?></small>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="col-12 col-md-12 col-lg-2 my-2 my-lg-0 card swiper-slide" style="height: auto;">
-                            <img src="../public/image/resources7.jpg" class="img-fluid h-100" alt="...">
-                            <div class="card-body d-flex justify-content-between">
-                                <button class="btn btn-sm btn-success">Book Now</button>
-                                <p class="text-secondary">₱100/Night</p>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-md-12 col-lg-2 my-2 my-lg-0 card swiper-slide" style="height: auto;">
-                            <img src="../public/image/resources7.jpg" class="img-fluid h-100" alt="...">
-                            <div class="card-body d-flex justify-content-between">
-                                <button class="btn btn-sm btn-success">Book Now</button>
-                                <p class="text-secondary">₱100/Night</p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-pagination"></div>
+                    <?php
+                    endforeach;
+                    ?>
                 </div>
-          
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+
         </div>
 
         <div class="col-12 bg-light py-lg-5" style="height: auto;" id="services">
@@ -132,7 +132,7 @@
                     <img src="../public/image/wallet_vector.png" alt="" style="height: 5rem;">
                     <p>Affordable Price</p>
                 </div>
-                
+
                 <div class="col-12 col-lg-3 mx-1 d-flex flex-column justify-content-center align-items-center" style="height: 10rem;">
                     <img src="../public/image/location_vector.png" alt="" style="height: 5rem;">
                     <p>Easy to Locate</p>
@@ -143,7 +143,7 @@
                     <p class="">has 5 Star Rating</p>
                 </div>
 
-                <div class="col-12 col-lg-3 mx-1 d-flex flex-column justify-content-center align-items-center" style="height: 10rem;">                    
+                <div class="col-12 col-lg-3 mx-1 d-flex flex-column justify-content-center align-items-center" style="height: 10rem;">
                     <img src="../public/image/certificate_vector.png" alt="" style="height: 5rem;">
                     <p>Certified by Municipality of Sipocot</p>
                 </div>
