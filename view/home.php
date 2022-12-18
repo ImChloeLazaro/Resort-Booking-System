@@ -100,14 +100,22 @@
                             <div class="card-body d-flex justify-content-between">
                             <form action="booking.php" method="post">
                                 <input type="hidden" name="price" value="<?php echo $room['price']?>">
-                                <input type="hidden" name="user_id" value="<?php echo $session::showSession('data')['id']?>">
+                                <input type="hidden" name="user_id" value="<?php if(isset($_SESSION['data'])){echo $session::showSession('data')['id'];}?>">
                                 <input type="hidden" name="room_id" value="<?php echo $room['id']?>">
                                 <?php 
-                                    $class = '';
-
-                                    $room['is_occupied'] ? $class = 'disabled': $class = '';
+                                    
+                                    if(isset($_SESSION['data'])):    
+                                        $class = '';
+                                        $room['is_occupied'] ? $class = 'disabled': $class = '';
+                                        ?>
+                                            <button name="book_btn" class="btn btn-sm btn-success  <?php echo $class?>">Book Now</button>
+                                        <?php
+                                    else:
+                                        ?>
+                                            <button name="book_btn" class="btn btn-sm btn-success disabled">Book Now</button>
+                                        <?php
+                                    endif;
                                 ?>
-                                <button name="book_btn" class="btn btn-sm btn-success  <?php echo $class?>">Book Now</button>
                             </form>
                                 <div class="d-flex flex-column">
                                     <small class="text-secondary">₱<?php echo $room['price'] ?> per Night</small>

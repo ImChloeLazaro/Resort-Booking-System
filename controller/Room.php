@@ -105,7 +105,13 @@ class Room{
             endif;
         }
     }
-
+    public function showAllReserved(){
+        $stmt = Singleton::getInstance()->prepare("SELECT * FROM `reservations` INNER JOIN `users` INNER JOIN `rooms` ON reservations.user_id = users.id AND reservations.room_id = rooms.id");
+        $stmt->execute();
+        $reservations = $stmt->get_result();
+        
+        return $reservations;
+    }
     public function displayRoom($room_id)
     {
         $stmt = Singleton::getInstance()->prepare("SELECT * FROM `reservations` INNER JOIN `users` ON reservations.user_id = users.id WHERE reservations.room_id = ?");

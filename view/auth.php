@@ -6,12 +6,7 @@
             <?php require_once '../includes/navbar.inc.php' ?>
         </div>
         <div class="row d-flex flex-column-reverse flex-md-row">
-            <div class="col-12 col-md-8 h-auto">
-                <div class="card" style="height: 85vh;">
-                    test
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-4 m-auto my-5" style="height: 40vh;">
                 <div class="card h-auto">
                     <h5 class="p-2 text-center">Login</h5>
                     <?php $auth->login();?>

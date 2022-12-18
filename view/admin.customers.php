@@ -1,5 +1,6 @@
 <?php require_once '../includes/header.inc.php';?>
-<?php require_once '../controller/Session.php'?>  
+<?php require_once '../controller/Session.php'?> 
+<?php require_once '../controller/Room.php'?>  
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -18,20 +19,26 @@
                         <th class="col-2">Until</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <p>Chloe Kim N. Lazaro</p>
-                            </td>
-                            <td>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam culpa libero deleniti vero saepe voluptas est neque esse nostrum repudiandae.</p>
-                            </td>
-                            <td>
-                                <p>5000</p>
-                            </td>
-                            <td>
-                                <p>Regular</p>
-                            </td>
-                        </tr>
+                        <?php  
+                        foreach($room->showAllReserved() as $reservation):
+                           ?>
+                            <tr>
+                                <td>
+                                    <p><?php echo $reservation['firstname'] . ' ' . $reservation['middlename'] . ' ' . $reservation['lastname']?></p>
+                                </td>
+                                <td>
+                                    <p><?php echo $reservation['number']?></p>
+                                </td>
+                                <td>
+                                    <p><?php echo $reservation['total'] ?></p>
+                                </td>
+                                <td>
+                                    <p><?php echo $reservation['start'] ?> - <?php echo $reservation['expire']?></p>
+                                </td>
+                            </tr>
+                           <?php
+                        endforeach;
+                        ?>
                     </tbody>
                 </table>
             </div>
